@@ -51,7 +51,7 @@ app.post("/addFilm", async (req, res) => {
 });
 
 // Fetching All films when page is loaded, a film is updated, a film is deleted
-app.get("/films", async (req, res) => {
+app.get("/", async (req, res) => {
 	const films = await pool.query(`SELECT * FROM film;`);
 	console.log(films.rows);
 	res.send(films.rows);
