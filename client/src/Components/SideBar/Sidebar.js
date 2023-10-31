@@ -6,13 +6,13 @@ import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+
+import listOfLink from "../../data/listOfLinks";
+
 import {
 	List,
 	ListItem,
@@ -21,7 +21,9 @@ import {
 	ListItemButton,
 } from "@mui/material";
 
-import { Link, Outlet } from "react-router-dom";
+import sidebarStyles from "./Sidebar.module.css";
+
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -90,7 +92,7 @@ const Drawer = styled(MuiDrawer, {
 	}),
 }));
 
-export default function MiniDrawer() {
+export default function MiniDrawer(props) {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
 
@@ -120,7 +122,7 @@ export default function MiniDrawer() {
 							<MenuIcon />
 						</IconButton>
 						<Typography variant='h6' noWrap component='div'>
-							Mini variant drawer
+							Demo
 						</Typography>
 					</Toolbar>
 				</AppBar>
@@ -134,18 +136,52 @@ export default function MiniDrawer() {
 							)}
 						</IconButton>
 					</DrawerHeader>
-					<Divider />
 					<List>
-						{["film", "director"].map((text, index) => (
-							<ListItem
-								key={index}
-								disablePadding
-								sx={{ display: "block" }}>
-								<Link to={`/${text}`}>{text}</Link>
-							</ListItem>
+						{listOfLink.map((item) => (
+							<Link
+								to={`/${item.id}`}
+								className={sidebarStyles["navLink"]}>
+								<ListItem
+									key={item.id}
+									disablePadding
+									sx={{ display: "block" }}>
+									<ListItemButton
+										sx={{
+											minHeight: 48,
+											justifyContent: open
+												? "initial"
+												: "center",
+											px: 2.5,
+										}}>
+										<ListItemIcon
+											sx={{
+												minWidth: 0,
+												mr: open
+													? 3
+													: "auto",
+												justifyContent:
+													"center",
+											}}>
+											{item.icon}
+										</ListItemIcon>
+										<ListItemText
+											primary={item.title}
+											sx={{
+												opacity: open
+													? 1
+													: 0,
+											}}
+										/>
+									</ListItemButton>
+								</ListItem>
+							</Link>
 						))}
 					</List>
 				</Drawer>
+				<Box component='main' sx={{ flexGrow: 1, p: 3 }}>
+					<DrawerHeader />
+					{props.children}
+				</Box>
 			</Box>
 		</>
 	);

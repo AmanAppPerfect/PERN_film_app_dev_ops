@@ -85,6 +85,53 @@ app.delete("/film/:film_id", async (req, res) => {
 	}
 });
 
+app.post("/addDirector", async (req, res) => {
+	const { director_name = "" } = req.body;
+	try {
+		const response = await pool.query(
+			`INSERT INTO directors(director_name) VALUES('${director_name}') RETURNING *`
+		);
+		res.send(response);
+	} catch (er2) {
+		console.error(er2);
+	}
+});
+
+// Fetching All director when page is loaded, a film is updated, a film is deleted
+app.get("/directors", async (req, res) => {
+	const director = await pool.query(`SELECT * FROM directors;;`);
+	console.log(director.rows);
+	res.send(director.rows);
+});
+
+// To edit a film
+app.put("/director/edit", async (req, res) => {
+	const { director_name, director_id } = req.body;
+	try {
+		const response = await pool.query(
+			`UPDATE directors
+			SET director_name='${director_name}'
+			WHERE director_id='${director_id}' RETURNING *`
+		);
+		res.send(response);
+	} catch (er3) {
+		console.log(er3);
+	}
+});
+
+app.delete("/director/:director_id", async (req, res) => {
+	const director_id = req.params.director_id;
+	console.log(director_id);
+	try {
+		const response = await pool.query(
+			`DELETE FROM directors WHERE director_id='${director_id}';`
+		);
+		console.log(response);
+	} catch (er4) {
+		console.log(er4);
+	}
+});
+
 app.listen(5000, () => {
 	console.log("Server Started");
 });
