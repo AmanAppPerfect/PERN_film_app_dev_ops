@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 
 import { MaterialReactTable } from "material-react-table";
 
@@ -8,7 +8,10 @@ import { Delete, Edit } from "@mui/icons-material";
 
 import AddDirectorModal from "./AddDirectorModal";
 
+import myContext from "../../Context";
+
 function Director() {
+	const { directorColumns } = useContext(myContext);
 	const [directorsData, setDirectorsData] = useState([]);
 	const [addDirectorModalStatus, setAddDirectorModalStatus] =
 		useState(false);
@@ -69,22 +72,7 @@ function Director() {
 		getDirectors();
 	}, [addDirectorModalStatus, handleSaveRowEdits, handleDeleteRow]);
 
-	const columns = useMemo(
-		() => [
-			{
-				accessorKey: "director_id",
-				header: "Director ID",
-				size: 60,
-				enableEditing: false,
-			},
-			{
-				accessorKey: "director_name",
-				header: "Director Name",
-				size: 140,
-			},
-		],
-		[]
-	);
+	const columns = useMemo(() => directorColumns, []);
 
 	return (
 		<div className='App'>

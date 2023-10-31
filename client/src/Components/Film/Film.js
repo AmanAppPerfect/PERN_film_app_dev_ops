@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useContext } from "react";
 
 import { MaterialReactTable } from "material-react-table";
 
@@ -8,7 +8,10 @@ import { Delete, Edit } from "@mui/icons-material";
 
 import AddFilmModal from "./AddFilmModal";
 
+import myContext from "../../Context";
+
 function Film() {
+	const { filmColumns } = useContext(myContext);
 	const [filmsData, setFilmsData] = useState([]);
 	const [addFilmModalStatus, setAddFilmModalStatus] = useState(false);
 
@@ -69,33 +72,7 @@ function Film() {
 		getFilms();
 	}, [addFilmModalStatus, handleSaveRowEdits, handleDeleteRow]);
 
-	const columns = useMemo(
-		() => [
-			{
-				accessorKey: "film_id",
-				header: "Film ID",
-				size: 60,
-				enableEditing: false,
-			},
-			{
-				accessorKey: "title",
-				header: "Title",
-				size: 140,
-			},
-			{
-				accessorKey: "film_description",
-				header: "Description",
-				size: 140,
-				enableResizing: true,
-			},
-			{
-				accessorKey: "director_id",
-				header: "Directed By",
-				size: 140,
-			},
-		],
-		[]
-	);
+	const columns = useMemo(() => filmColumns, []);
 
 	return (
 		<div className='App'>
