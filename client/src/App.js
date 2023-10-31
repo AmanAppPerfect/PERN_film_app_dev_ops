@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Film from "./Components/Film/Film";
 import Director from "./Components/Director/Director";
@@ -9,13 +9,12 @@ import "./App.css";
 
 function App() {
 	return (
-		<SideBar>
-			<Routes>
-				<Route path='/' exact element={<Film />} />
+		<Routes>
+			<Route path='/' exact element={<SideBar />}>
 				<Route path='/film' exact element={<Film />} />
 				<Route path='/director' element={<Director />} />
-			</Routes>
-		</SideBar>
+			</Route>
+		</Routes>
 	);
 }
 

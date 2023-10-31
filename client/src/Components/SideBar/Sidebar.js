@@ -23,7 +23,7 @@ import {
 
 import sidebarStyles from "./Sidebar.module.css";
 
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -180,7 +180,8 @@ export default function MiniDrawer(props) {
 				</Drawer>
 				<Box component='main' sx={{ flexGrow: 1, p: 3 }}>
 					<DrawerHeader />
-					{props.children}
+					<Outlet />
+					{/* {props.children} */}
 				</Box>
 			</Box>
 		</>

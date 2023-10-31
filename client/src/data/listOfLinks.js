@@ -6,7 +6,6 @@ const listOfLink = [
 		id: "film",
 		title: "Film",
 		icon: <MovieIcon />,
-
 	},
 	{
 		id: "director",
