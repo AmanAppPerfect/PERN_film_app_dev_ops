@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext, useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Button } from "@mui/material";
 
 import listOfLink from "../../data/listOfLinks";
 
@@ -23,7 +24,11 @@ import {
 
 import sidebarStyles from "./Sidebar.module.css";
 
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet } from "react-router-dom";
+
+import myContextApp from "../../Context"
+
+import HomePage from "../../Views/HomePage"
 
 const drawerWidth = 240;
 
@@ -94,7 +99,9 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer(props) {
 	const theme = useTheme();
-	const [open, setOpen] = React.useState(false);
+	const [open, setOpen] = useState(false);
+
+	const myContextSidebar = useContext(myContextApp)
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -104,12 +111,16 @@ export default function MiniDrawer(props) {
 		setOpen(false);
 	};
 
+	if (myContextSidebar.userData.type !== "userData") {
+		return <Navigate path="/" element={<HomePage />} />
+	}
+
 	return (
 		<>
 			<Box sx={{ display: "flex" }}>
 				<CssBaseline />
 				<AppBar position='fixed' open={open}>
-					<Toolbar>
+					<Toolbar sx={{ justifyContent: "space-between" }}>
 						<IconButton
 							color='inherit'
 							aria-label='open drawer'
@@ -122,8 +133,18 @@ export default function MiniDrawer(props) {
 							<MenuIcon />
 						</IconButton>
 						<Typography variant='h6' noWrap component='div'>
-							Demo
+							Movies Database
 						</Typography>
+						<Button
+							edge='end'
+							color='secondary'
+							onClick={() => {
+								window.localStorage.clear()
+								myContextSidebar.setUserData({})
+							}}
+							variant='contained'>
+							Log Out
+						</Button>
 					</Toolbar>
 				</AppBar>
 				<Drawer variant='permanent' open={open}>
@@ -181,7 +202,6 @@ export default function MiniDrawer(props) {
 				<Box component='main' sx={{ flexGrow: 1, p: 3 }}>
 					<DrawerHeader />
 					<Outlet />
-					{/* {props.children} */}
 				</Box>
 			</Box>
 		</>

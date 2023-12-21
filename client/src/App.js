@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Film from "./Components/Film/Film";
 import Director from "./Components/Director/Director";
 import SideBar from "./Components/SideBar/Sidebar";
 import myContext from "./Context";
+
+import HomePage from "./Views/HomePage";
 
 import "./App.css";
 
@@ -48,14 +50,24 @@ const directorTableColumns = [
 ];
 
 function App() {
+	const data = JSON.parse(window.localStorage.getItem("userData"));
+	const [userData, setUserData] = useState(data == null ? {} : data);
+
+	useEffect(() => {
+		window.localStorage.setItem("userData", JSON.stringify(userData));
+	}, [userData]);
+
 	return (
 		<myContext.Provider
 			value={{
 				filmColumns: filmTableColumns,
 				directorColumns: directorTableColumns,
+				userData: userData,
+				setUserData: setUserData
 			}}>
 			<Routes>
-				<Route path='/' exact element={<SideBar />}>
+				{console.log(userData)}
+				<Route path='/' element={userData.type === "userData" ? <SideBar /> : <HomePage />}>
 					<Route path='/film' exact element={<Film />} />
 					<Route path='/director' element={<Director />} />
 				</Route>

@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import pool from "./data/db.js";
+import pool from "./data/dbConfig.js";
 
 const app = express();
 
@@ -9,6 +9,54 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// users authentication
+app.post("/signIn", async function (req, res) {
+	console.log(req.body);
+	const { username, user_password } = req.body;
+	const response = await pool.query(
+		`SELECT user_password FROM uservalidation WHERE username='${username}'`
+	);
+	if (response.rowCount == 0)
+		res.send({ type: "error", message: "Account doesn't exist" });
+	else if (response.rows[0].user_password == user_password) {
+		const userData = await pool.query(
+			`SELECT * FROM registereduser WHERE username='${username}'`
+		);
+		userData.rows[0] = {
+			...userData.rows[0],
+			type: "userData",
+		};
+		res.send(userData.rows[0]);
+	} else res.send({ type: "error", message: "Wrong Password" });
+});
+
+app.post("/signUp", async function (req, res) {
+	console.log(req.body);
+	const {
+		username,
+		user_age,
+		user_f_name,
+		user_l_name,
+		user_email,
+		user_password,
+	} = req.body;
+	parseInt(user_age);
+	const response1 = await pool.query(
+		`INSERT INTO 
+		registereduser(username,user_age,user_f_name,user_l_name,user_email) 
+		VALUES('${username}','${user_age}','${user_f_name}','${user_l_name}','${user_email}') RETURNING * ;`
+	);
+	console.log(response1);
+
+	const response2 = await pool.query(
+		`INSERT INTO 
+		uservalidation
+		VALUES('${username}','${user_password}') RETURNING * ;`
+	);
+	console.log(response2);
+	res.send("Added Succesfully");
+});
 
 app.get("/directors", async (req, res) => {
 	const directors = await pool.query(`SELECT * FROM directors;`);
