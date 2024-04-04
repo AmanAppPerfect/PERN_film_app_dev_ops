@@ -63,11 +63,19 @@ function App() {
 				filmColumns: filmTableColumns,
 				directorColumns: directorTableColumns,
 				userData: userData,
-				setUserData: setUserData
+				setUserData: setUserData,
 			}}>
 			<Routes>
 				{console.log(userData)}
-				<Route path='/' element={userData.type === "userData" ? <SideBar /> : <HomePage />}>
+				<Route
+					path='/'
+					element={
+						userData.type === "userData" ? (
+							<SideBar />
+						) : (
+							<HomePage />
+						)
+					}>
 					<Route path='/film' exact element={<Film />} />
 					<Route path='/director' element={<Director />} />
 				</Route>

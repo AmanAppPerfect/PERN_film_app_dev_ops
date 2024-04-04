@@ -1,13 +1,7 @@
-FROM node:18-alpine
-
-WORKDIR /index
-
-COPY package*.json ./
-
+FROM node:lts-alpine
+WORKDIR /server
+COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm install
-
 COPY . .
-
 EXPOSE 5000
-
-CMD [ "npm","start" ]
+CMD ["npm", "start"]

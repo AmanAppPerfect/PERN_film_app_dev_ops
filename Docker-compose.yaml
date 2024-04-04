@@ -1,41 +1,38 @@
-version: "3.8"
+version: '1.0'
 services:
-server:
-  container_name: pern-server-container
-  image: pern-server-image:latest
-  depends_on:
-    - db
-  ports:
-    - 5000:5000
-  networks:
-    - app-network
-
-postgres-db:
-  image: postgres:16
-  restart: always
-  environment:
-    - POSTGRES_USER=appperfect
-    - POSTGRES_PASSWORD=postgres
-  ports:
-    - "5432:5432"
-  volumes:
-    - database:/var/lib/postgresql/data
-    - ./server/data/movie.sql:/docker-entrypoint-initdb.d/movie.sql
-
-client:
-  container_name: pern-client-container
-  image: pern-client-image:latest
-  depends_on:
-    - server
-  ports:
-    - "3000:3000"
-  networks:
-    - app-network
-
-networks:
-  app-network:
-    driver: bridge
-
+  db:
+    container_name: node_docker_postgres_container
+    image: postgres
+    ports:
+      - 5432:5432/tcp
+    environment:
+      POSTGRES_DB: filmdb
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    volumes:
+      - pgData:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  server:
+    build:
+      context: server
+      dockerfile: Dockerfile
+    image: node_docker_server_image
+    container_name: node_docker_server_container
+    command: npm start
+    ports:
+      - 5000:5000/tcp
+    depends_on:
+      - db
+  client:
+    build:
+      context: client
+      dockerfile: Dockerfile
+    image: node_docker_client_image
+    container_name: node_docker_client_container
+    command: npm start
+    ports:
+      - 3000:3000/tcp
+    depends_on:
+      - server
 volumes:
-  postgres-db:
-    driver: local
+  pgData:
