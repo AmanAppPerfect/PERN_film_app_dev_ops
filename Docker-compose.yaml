@@ -1,10 +1,10 @@
 version: '1.0'
 services:
   db:
-    container_name: node_docker_postgres_container
+    container_name: pern_postgres_container
     image: postgres
     ports:
-      - 5432:5432/tcp
+      - 5432:5432
     environment:
       POSTGRES_DB: filmdb
       POSTGRES_PASSWORD: postgres
@@ -12,27 +12,38 @@ services:
     volumes:
       - pgData:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - private
   server:
     build:
       context: server
       dockerfile: Dockerfile
-    image: node_docker_server_image
-    container_name: node_docker_server_container
+    image: amanbhargava16/pern_server_image
+    container_name: pern_server_container
     command: npm start
     ports:
-      - 5000:5000/tcp
+      - 5000:5000
     depends_on:
       - db
+    networks:
+      - public
+      - private
   client:
     build:
       context: client
       dockerfile: Dockerfile
-    image: node_docker_client_image
-    container_name: node_docker_client_container
+    image: amanbhargava16/pern_client_image
+    container_name: pern_client_container
     command: npm start
     ports:
-      - 3000:3000/tcp
+      - 3000:3000
     depends_on:
       - server
+    networks:
+      - public
 volumes:
   pgData:
+networks:
+  public:
+  private:
+    internal: true

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+     name: postgres-deployment
+spec:
+     replicas: 2
+     selector:
+          matchLabels:
+               app: postgres
+     template:
+          metadata:
+               labels:
+                    app: postgres
+          spec:
+               containers:
+                    - name: pern-postgres-container
+                      image: "postgres"
+                      imagePullPolicy: IfNotPresent
+                      ports:
+                           - containerPort: 5432
+                      env:
+                           - name: POSTGRES_PASSWORD
+                             valueFrom:
+                                  secretKeyRef:
+                                       name: postgres-secret
+                                       key: password
+                           - name: POSTGRES_USER
+                             valueFrom:
+                                  secretKeyRef:
+                                       name: postgres-secret
+                                       key: user
+                           - name: POSTGRES_DB
+                             valueFrom:
+                                  secretKeyRef:
+                                       name: postgres-secret
+                                       key: db
+                      volumeMounts:
+                           - mountPath: /var/lib/postgresql/data
+                             name: postgresdata
+               volumes:
+                    - name: postgresdata
+                      persistentVolumeClaim:
+                           claimName: postgres-volume-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+     name: postgres-service
+     labels:
+          app: postgres
+spec:
+     type: NodePort
+     ports:
+          - port: 5432
+     selector:
+          app: postgres
