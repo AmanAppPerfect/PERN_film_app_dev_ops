@@ -55,7 +55,7 @@ function AddDirectorModal({ columns, open, onclose }) {
 						{columns.map(
 							(column) =>
 								!(
-									column.accessorKey == "director_id"
+									column.accessorKey === "director_id"
 								) && (
 									<TextField
 										type='text'

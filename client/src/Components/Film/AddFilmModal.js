@@ -55,10 +55,10 @@ function AddFilmModal({ columns, open, onclose }) {
 						}}>
 						{columns.map(
 							(column) =>
-								!(column.accessorKey == "film_id") && (
+								!(column.accessorKey === "film_id") && (
 									<TextField
 										type={
-											column.accessorKey ==
+											column.accessorKey ===
 											"director_id"
 												? "number"
 												: "text"

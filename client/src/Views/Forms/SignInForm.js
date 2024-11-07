@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Box, TextField, Stack, Modal, Button } from "@mui/material";
 import myContext from "../../Context";
-import { redirect } from "react-router-dom";
 
 export default function SignInForm() {
 	const context = useContext(myContext);

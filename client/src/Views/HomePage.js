@@ -12,13 +12,13 @@ function handlerModals(modalState, actions) {
 		case "signUp": {
 			return {
 				...modalState,
-				signUpModal: actions.task == "toOpen" ? true : false,
+				signUpModal: actions.task === "toOpen" ? true : false,
 			};
 		}
 		case "signIn": {
 			return {
 				...modalState,
-				signInModal: actions.task == "toOpen" ? true : false,
+				signInModal: actions.task === "toOpen" ? true : false,
 			};
 		}
 		default:
