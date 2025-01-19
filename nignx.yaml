@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-project
+  name: nginx-deployment
 spec:
   replicas: 4
   selector:
@@ -21,7 +21,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-project
+  name: nginx-service
 spec:
   type: LoadBalancer
   ports:
