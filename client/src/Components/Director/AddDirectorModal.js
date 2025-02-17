@@ -22,7 +22,7 @@ function AddDirectorModal({ columns, open, onclose }) {
 		if (values.director_name) {
 			try {
 				const addDirectorResponse = await fetch(
-					"http://localhost:5000/addDirector",
+					"http://server-service.server-ns.svc.cluster.local:5000/addDirector",
 					{
 						method: "POST",
 						headers: { "Content-Type": "application/json" },

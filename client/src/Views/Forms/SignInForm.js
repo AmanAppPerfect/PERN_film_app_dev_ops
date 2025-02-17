@@ -9,7 +9,7 @@ export default function SignInForm() {
 	const [values, setValues] = useState({});
 
 	async function signin() {
-		const res = await fetch("http://localhost:5000/signIn", {
+		const res = await fetch("http://server-service.server-ns.svc.cluster.local:5000/signIn", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(values),

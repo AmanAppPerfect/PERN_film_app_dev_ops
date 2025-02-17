@@ -22,7 +22,7 @@ function Director() {
 
 		try {
 			const editRowResponse = await fetch(
-				"http://localhost:5000/director/edit",
+				"http://server-service.server-ns.svc.cluster.local:5000/director/edit",
 				{
 					method: "put",
 					headers: { "Content-Type": "application/json" },
@@ -47,7 +47,7 @@ function Director() {
 			console.log(row.original);
 			try {
 				const response = await fetch(
-					`http://localhost:5000/director/${row.getValue(
+					`http://server-service.server-ns.svc.cluster.local:5000/director/${row.getValue(
 						"director_id"
 					)}`,
 					{
@@ -65,7 +65,7 @@ function Director() {
 
 	useEffect(() => {
 		async function getDirectors() {
-			const response = await fetch("http://localhost:5000/directors");
+			const response = await fetch("http://server-service.server-ns.svc.cluster.local:5000/directors");
 			const directors = await response.json();
 			setDirectorsData(directors);
 		}

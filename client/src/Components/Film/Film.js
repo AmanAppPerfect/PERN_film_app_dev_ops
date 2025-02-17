@@ -22,7 +22,7 @@ function Film() {
 
 		try {
 			const editRowResponse = await fetch(
-				"http://localhost:5000/film/edit",
+				"http://server-service.server-ns.svc.cluster.local:5000/film/edit",
 				{
 					method: "put",
 					headers: { "Content-Type": "application/json" },
@@ -47,7 +47,7 @@ function Film() {
 			console.log(row.original);
 			try {
 				const response = await fetch(
-					`http://localhost:5000/film/${row.getValue(
+					`http://server-service.server-ns.svc.cluster.local:5000/film/${row.getValue(
 						"film_id"
 					)}`,
 					{
@@ -65,7 +65,7 @@ function Film() {
 
 	useEffect(() => {
 		async function getFilms() {
-			const response = await fetch("http://localhost:5000");
+			const response = await fetch("http://server-service.server-ns.svc.cluster.local:5000");
 			const films = await response.json();
 			setFilmsData(films);
 		}

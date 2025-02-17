@@ -23,7 +23,7 @@ function AddFilmModal({ columns, open, onclose }) {
 		if (values.title) {
 			try {
 				const addFilmResponse = await fetch(
-					"http://localhost:5000/addFilm",
+					"http://server-service.server-ns.svc.cluster.local:5000/addFilm",
 					{
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
