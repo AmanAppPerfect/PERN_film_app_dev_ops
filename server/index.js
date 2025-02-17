@@ -58,33 +58,6 @@ app.post("/signUp", async function (req, res) {
 	res.send("Added Succesfully");
 });
 
-app.get("/directors", async (req, res) => {
-	const directors = await pool.query(`SELECT * FROM directors;`);
-	res.send(directors.rows);
-});
-
-app.get("/directors/:director_name", async (req, res) => {
-	const director_name = req.params.director_name;
-	const directors = await pool.query(
-		`SELECT * FROM directors WHERE director_name='${director_name}';`
-	);
-	res.send(directors.rows);
-});
-
-app.post("/addDirector", async (req, res) => {
-	try {
-		const { director_name } = req.body;
-
-		const newDirector = await pool.query(
-			`INSERT INTO directors(director_name) VALUES('${director_name}') RETURNING *`
-		);
-		console.log(newDirector);
-		res.send("Added Succesfully");
-	} catch (er1) {
-		console.log(er1);
-	}
-});
-
 // Adding a new film
 app.post("/addFilm", async (req, res) => {
 	const { title, film_description = "", director_id = 0 } = req.body;
@@ -133,26 +106,34 @@ app.delete("/film/:film_id", async (req, res) => {
 	}
 });
 
-app.post("/addDirector", async (req, res) => {
-	const { director_name = "" } = req.body;
-	try {
-		const response = await pool.query(
-			`INSERT INTO directors(director_name) VALUES('${director_name}') RETURNING *`
-		);
-		res.send(response);
-	} catch (er2) {
-		console.error(er2);
-	}
-});
-
-// Fetching All director when page is loaded, a film is updated, a film is deleted
 app.get("/directors", async (req, res) => {
 	const director = await pool.query(`SELECT * FROM directors;;`);
 	console.log(director.rows);
 	res.send(director.rows);
 });
 
-// To edit a film
+app.get("/directors/:director_name", async (req, res) => {
+	const director_name = req.params.director_name;
+	const directors = await pool.query(
+		`SELECT * FROM directors WHERE director_name='${director_name}';`
+	);
+	res.send(directors.rows);
+});
+
+app.post("/addDirector", async (req, res) => {
+	try {
+		const { director_name } = req.body;
+
+		const newDirector = await pool.query(
+			`INSERT INTO directors(director_name) VALUES('${director_name}') RETURNING *`
+		);
+		console.log(newDirector);
+		res.send("Added Succesfully");
+	} catch (er1) {
+		console.log(er1);
+	}
+});
+
 app.put("/director/edit", async (req, res) => {
 	const { director_name, director_id } = req.body;
 	try {
