@@ -1,6 +1,8 @@
 **/.classpath
 **/.dockerignore
-**/.env
+**/.env*
+!**/.env.production
+!**/.env.development
 **/.git
 **/.gitignore
 **/.project

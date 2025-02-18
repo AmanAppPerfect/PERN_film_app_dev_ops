@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "dotenv -e .env.development -- nodemon index.js",
+    "build": "dotenv -e .env.production -- nodemon index.js"
   },
   "author": "Aman AppPerfect",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "dotenv-cli": "^8.0.0",
     "express": "^4.18.2",
     "nodemon": "^3.0.1",
     "pg": "^8.11.3"

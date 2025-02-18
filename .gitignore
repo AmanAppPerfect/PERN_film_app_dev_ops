@@ -25,5 +25,6 @@ yarn-error.log*
 # monitoring
 clusterMetaData.csv
 
-# environment variables
-.env
+# Ignore all .env files except sample
+.env*
+!.env.example
