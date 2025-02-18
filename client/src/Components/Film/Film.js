@@ -11,7 +11,7 @@ import AddFilmModal from "./AddFilmModal";
 import myContext from "../../Context";
 
 function Film() {
-	const { filmColumns } = useContext(myContext);
+	const { filmColumns, BASE_URL } = useContext(myContext);
 	const [filmsData, setFilmsData] = useState([]);
 	const [addFilmModalStatus, setAddFilmModalStatus] = useState(false);
 
@@ -21,14 +21,11 @@ function Film() {
 		console.log(values);
 
 		try {
-			const editRowResponse = await fetch(
-				"http://server-service.server-ns.svc.cluster.local:5000/film/edit",
-				{
-					method: "put",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(values),
-				}
-			);
+			const editRowResponse = await fetch(`${BASE_URL}/film/edit`, {
+				method: "put",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(values),
+			});
 			console.log(editRowResponse);
 		} catch (er6) {
 			console.error(er6);
@@ -39,17 +36,13 @@ function Film() {
 	const handleDeleteRow = async (row) => {
 		if (
 			window.confirm(
-				`Are you sure you want to delete Film ${row.getValue(
-					"title"
-				)}`
+				`Are you sure you want to delete Film ${row.getValue("title")}`
 			)
 		) {
 			console.log(row.original);
 			try {
 				const response = await fetch(
-					`http://server-service.server-ns.svc.cluster.local:5000/film/${row.getValue(
-						"film_id"
-					)}`,
+					`${BASE_URL}/film/${row.getValue("film_id")}`,
 					{
 						method: "DELETE",
 					}
@@ -65,7 +58,8 @@ function Film() {
 
 	useEffect(() => {
 		async function getFilms() {
-			const response = await fetch("http://server-service.server-ns.svc.cluster.local:5000");
+			console.log("get films called");
+			const response = await fetch(BASE_URL);
 			const films = await response.json();
 			setFilmsData(films);
 		}

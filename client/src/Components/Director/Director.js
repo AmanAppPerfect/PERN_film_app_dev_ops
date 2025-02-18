@@ -11,24 +11,20 @@ import AddDirectorModal from "./AddDirectorModal";
 import myContext from "../../Context";
 
 function Director() {
-	const { directorColumns } = useContext(myContext);
+	const { directorColumns, BASE_URL } = useContext(myContext);
 	const [directorsData, setDirectorsData] = useState([]);
-	const [addDirectorModalStatus, setAddDirectorModalStatus] =
-		useState(false);
+	const [addDirectorModalStatus, setAddDirectorModalStatus] = useState(false);
 
 	const handleSaveRowEdits = async ({ exitEditingMode, values }) => {
 		values.director_id = parseInt(values.director_id);
 		console.log(values);
 
 		try {
-			const editRowResponse = await fetch(
-				"http://server-service.server-ns.svc.cluster.local:5000/director/edit",
-				{
-					method: "put",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(values),
-				}
-			);
+			const editRowResponse = await fetch(`${BASE_URL}/director/edit`, {
+				method: "put",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(values),
+			});
 			console.log(editRowResponse);
 		} catch (er6) {
 			console.error(er6);
@@ -47,9 +43,7 @@ function Director() {
 			console.log(row.original);
 			try {
 				const response = await fetch(
-					`http://server-service.server-ns.svc.cluster.local:5000/director/${row.getValue(
-						"director_id"
-					)}`,
+					`${BASE_URL}/director/${row.getValue("director_id")}`,
 					{
 						method: "DELETE",
 					}
@@ -65,7 +59,7 @@ function Director() {
 
 	useEffect(() => {
 		async function getDirectors() {
-			const response = await fetch("http://server-service.server-ns.svc.cluster.local:5000/directors");
+			const response = await fetch(`${BASE_URL}/directors`);
 			const directors = await response.json();
 			setDirectorsData(directors);
 		}

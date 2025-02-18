@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import {
 	Button,
@@ -10,7 +10,10 @@ import {
 	TextField,
 } from "@mui/material";
 
+import myContext from "../../Context";
+
 function AddDirectorModal({ columns, open, onclose }) {
+	const { BASE_URL } = useContext(myContext);
 	const [values, setValues] = useState({
 		director_id: 0,
 		director_name: "",
@@ -22,7 +25,7 @@ function AddDirectorModal({ columns, open, onclose }) {
 		if (values.director_name) {
 			try {
 				const addDirectorResponse = await fetch(
-					"http://server-service.server-ns.svc.cluster.local:5000/addDirector",
+					`${BASE_URL}/addDirector`,
 					{
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
@@ -54,9 +57,7 @@ function AddDirectorModal({ columns, open, onclose }) {
 						}}>
 						{columns.map(
 							(column) =>
-								!(
-									column.accessorKey === "director_id"
-								) && (
+								!(column.accessorKey === "director_id") && (
 									<TextField
 										type='text'
 										key={column.accessorKey}
@@ -65,8 +66,7 @@ function AddDirectorModal({ columns, open, onclose }) {
 										onChange={(e) =>
 											setValues({
 												...values,
-												[e.target.name]:
-													e.target.value,
+												[e.target.name]: e.target.value,
 											})
 										}
 										id={column.header}

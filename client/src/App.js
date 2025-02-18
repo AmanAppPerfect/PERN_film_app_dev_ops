@@ -64,6 +64,7 @@ function App() {
 				directorColumns: directorTableColumns,
 				userData: userData,
 				setUserData: setUserData,
+				BASE_URL: process.env.REACT_APP_SERVER_BASE_URL,
 			}}>
 			<Routes>
 				{console.log(userData)}

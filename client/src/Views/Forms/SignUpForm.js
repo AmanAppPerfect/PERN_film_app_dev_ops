@@ -10,7 +10,7 @@ export default function SignUpForm() {
 		context.setUserData({ ...values, type: "userData" });
 		console.log(values);
 
-		await fetch("http://server-service.server-ns.svc.cluster.local:5000/signUp", {
+		await fetch(`${context.BASE_URL}/signUp`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(values),
@@ -120,7 +120,6 @@ export default function SignUpForm() {
 							})
 						}
 					/>
-
 				</Stack>
 				<Box
 					sx={{

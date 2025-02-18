@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import {
 	Button,
@@ -10,7 +10,10 @@ import {
 	TextField,
 } from "@mui/material";
 
+import myContext from "../../Context";
+
 function AddFilmModal({ columns, open, onclose }) {
+	const { BASE_URL } = useContext(myContext);
 	const [values, setValues] = useState({
 		film_description: "",
 		title: "",
@@ -22,14 +25,11 @@ function AddFilmModal({ columns, open, onclose }) {
 
 		if (values.title) {
 			try {
-				const addFilmResponse = await fetch(
-					"http://server-service.server-ns.svc.cluster.local:5000/addFilm",
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(values),
-					}
-				);
+				const addFilmResponse = await fetch(`${BASE_URL}/addFilm`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(values),
+				});
 				console.log(addFilmResponse);
 			} catch (er7) {
 				console.error(er7);
@@ -58,8 +58,7 @@ function AddFilmModal({ columns, open, onclose }) {
 								!(column.accessorKey === "film_id") && (
 									<TextField
 										type={
-											column.accessorKey ===
-											"director_id"
+											column.accessorKey === "director_id"
 												? "number"
 												: "text"
 										}
@@ -69,8 +68,7 @@ function AddFilmModal({ columns, open, onclose }) {
 										onChange={(e) =>
 											setValues({
 												...values,
-												[e.target.name]:
-													e.target.value,
+												[e.target.name]: e.target.value,
 											})
 										}
 										id={column.header}
