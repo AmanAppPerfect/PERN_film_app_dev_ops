@@ -1,0 +1,42 @@
+version: '3'
+
+tasks:
+  deploy:client:
+    cmds:
+      - kubectl create namespace client-ns
+      - kubectl apply -f client.yaml
+
+  deploy:server:
+    cmds:
+      - kubectl create namespace server-ns
+      - kubectl apply -f server.yaml
+
+  deploy:postgres:
+    cmds:
+      - kubectl create namespace postgres-ns
+      - kubectl apply -f postgres-secret.yaml
+      - kubectl create configmap db-init-script --from-file=init.sql -n postgres-ns
+      - kubectl apply -f psql-pv.yaml
+      - kubectl apply -f psql-claim.yaml
+      - kubectl apply -f postgres.yaml
+  
+  build-and-push:client:
+    cmds:
+      - cd client && docker build -t amanappperfect/pern_client_image:latest .
+      - docker push amanappperfect/pern_client_image:latest
+  
+  build-and-push:server:
+    cmds:
+      - cd server && docker build -t amanappperfect/pern_server_image:latest .
+      - docker push amanappperfect/pern_server_image:latest
+
+  delete:cluster:
+    cmds:
+      - kubectl delete namespace client-ns
+      - kubectl delete namespace server-ns
+      - kubectl delete namespace postgres-ns
+      - kubectl get all -A
+      - kubectl get pvc -A
+      - kubectl get pv -A
+      - kubectl get configmap -A
+      - kubectl get secret -A
