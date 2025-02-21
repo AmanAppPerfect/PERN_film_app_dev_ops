@@ -1,15 +1,33 @@
 version: '3'
 
 tasks:
+  list-all-res:
+    cmds:
+      - kubectl get all -A
+      - kubectl get pvc -A
+      - kubectl get pv -A
+      - kubectl get configmap -A
+      - kubectl get secret -A
+
+  get-res:postgres:
+    cmds:
+      - kubectl get all -n postgres-ns
+      - kubectl get pvc -n postgres-ns
+      - kubectl get pv -n postgres-ns
+      - kubectl get configmap -n postgres-ns
+      - kubectl get secret -n postgres-ns
+
   deploy:client:
     cmds:
       - kubectl create namespace client-ns
       - kubectl apply -f client.yaml
+      - kubectl get all -n client-ns
 
   deploy:server:
     cmds:
       - kubectl create namespace server-ns
       - kubectl apply -f server.yaml
+      - kubectl get all -n server-ns
 
   deploy:postgres:
     cmds:
@@ -19,6 +37,7 @@ tasks:
       - kubectl apply -f psql-pv.yaml
       - kubectl apply -f psql-claim.yaml
       - kubectl apply -f postgres.yaml
+      - task: get-res:postgres
   
   build-and-push:client:
     cmds:
@@ -30,13 +49,11 @@ tasks:
       - cd server && docker build -t amanappperfect/pern_server_image:latest .
       - docker push amanappperfect/pern_server_image:latest
 
-  delete:cluster:
+  destroy:cluster:
     cmds:
       - kubectl delete namespace client-ns
+      - kubectl get all -n client-ns
       - kubectl delete namespace server-ns
+      - kubectl get all -n server-ns
       - kubectl delete namespace postgres-ns
-      - kubectl get all -A
-      - kubectl get pvc -A
-      - kubectl get pv -A
-      - kubectl get configmap -A
-      - kubectl get secret -A
+      - task: get-res:postgres
