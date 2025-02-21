@@ -56,4 +56,5 @@ tasks:
       - kubectl delete namespace server-ns
       - kubectl get all -n server-ns
       - kubectl delete namespace postgres-ns
+      - kubectl delete pv postgres-volume
       - task: get-res:postgres
